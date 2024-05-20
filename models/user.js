@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.user_security_question, {
+        foreignKey: 'userId',
+      });
     }
   }
   User.init({
@@ -19,7 +22,9 @@ module.exports = (sequelize, DataTypes) => {
     username: DataTypes.STRING,
     password: DataTypes.STRING,
     phoneNumber: DataTypes.STRING,
-    uniqueId: DataTypes.STRING
+    uniqueId: DataTypes.STRING,
+    pinCode: DataTypes.STRING,
+    isPhoneValid: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'User',

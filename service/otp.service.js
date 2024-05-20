@@ -24,6 +24,18 @@ class TokenService {
         });
         return result
     }
+    async verifyToken(token, pinId) {
+        const result = await axios({
+            method: 'post',
+            url: `https://api.ng.termii.com/api/sms/otp/verify`,
+            data: {
+                api_key: "TLO99JiZrUtinlp6rE6P4MiduNQ4vqOGQsHRY0Fc9emJfz69vmkXB8mrqH8kVg",
+                pin: token,
+                pin_id: pinId
+            }
+        });
+        return result
+    }
 }
 
 module.exports = new TokenService()

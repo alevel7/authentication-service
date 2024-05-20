@@ -49,7 +49,63 @@ class AuthController {
         }
 
         const serviceResponse = await authService.updateUser(req.body);
+        return res.status(serviceResponse.code).json(serviceResponse);
+    }
+
+    async getSecurityQuestions(req, res) {
+        const serviceResponse = await authService.getSecurityQuestions();
         return res.status(200).json(serviceResponse);
     }
+    async saveUserSecurityAnswer(req, res) {
+        let validation = new Validator(req.body.data, validators.SecurityQuestionValidator);
+        const itFailed = validation.fails();
+
+        if (itFailed) {
+            const errorFields = Object.keys(validation.errors.errors);
+            const firstField = errorFields[0];
+            return res.status(400).json({
+                success: false,
+                message: validation.errors.errors[firstField][0],
+            });
+        }
+        const serviceResponse = await authService.saveUserSecurityAnswer(req.body.data, req.params.userId);
+        return res.status(serviceResponse.code).json(serviceResponse);
+    }
+    async getUserByBvn(req, res) {
+        
+    }
+
+    async verifyToken(req, res) {
+        let validation = new Validator(req.body, validators.verifyTokenPayload);
+        const itFailed = validation.fails();
+
+        if (itFailed) {
+            const errorFields = Object.keys(validation.errors.errors);
+            const firstField = errorFields[0];
+            return res.status(400).json({
+                success: false,
+                message: validation.errors.errors[firstField][0],
+            });
+        }
+        const serviceResponse = await authService.verifyUserToken(req.body);
+        return res.status(serviceResponse.code).json(serviceResponse);
+    }
+    
+    async resendToken(req, res) {
+        let validation = new Validator(req.body, validators.resendTokenpayload);
+        const itFailed = validation.fails();
+
+        if (itFailed) {
+            const errorFields = Object.keys(validation.errors.errors);
+            const firstField = errorFields[0];
+            return res.status(400).json({
+                success: false,
+                message: validation.errors.errors[firstField][0],
+            });
+        }
+        const serviceResponse = await authService.resendToken(req.body);
+        return res.status(serviceResponse.code).json(serviceResponse);
+    }
+
 }
 module.exports =  new AuthController();
