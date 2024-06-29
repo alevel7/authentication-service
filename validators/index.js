@@ -27,7 +27,9 @@ const SecurityQuestionValidator = {
 
 const verifyTokenPayload = {
     token: 'string|required',
-    phoneNumber: 'string|required'
+    phoneNumber: 'string|required',
+    uniqueId: "string|required",
+    errorType: 'string|required',
 }
 const resendTokenpayload = {
     phoneNumber: 'string|required'
@@ -37,5 +39,6 @@ module.exports = {
     RegisterValidator,
     UpdateValidator,
     SecurityQuestionValidator,
-    verifyTokenPayload
+    verifyTokenPayload,
+    resendTokenpayload
 }

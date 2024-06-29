@@ -73,6 +73,7 @@ const loginUser = async (data) => {
         return {
             success: false,
             message: 'INVALID_PHONE_NUMBER',
+            data: { user, token: '' },
             code: 400,
         }
     }
@@ -90,11 +91,20 @@ const loginUser = async (data) => {
     if (user.uniqueId !== data.uniqueId) {
         // send otp to phone
         console.log(user.uniqueId, data.uniqueId);
-        // await tokenService.sendVerificationToken(user.phoneNumber)
+        const result = await tokenService.sendVerificationToken(user.phoneNumber)
+        await db.User.update(
+            { pinCode: result.data.pinId },
+            {
+                where: {
+                    phoneNumber: user.phoneNumber
+                },
+            },
+        );
         return {
             code: 409,
+            data: { user, token: '' },
             success: false,
-            message: 'We detected login from a different device, an otp has been sent to you for verification',
+            message: 'NEW_DEVICE_DETECTED',
         };
     }
     //generate token
@@ -189,33 +199,50 @@ const verifyUserToken = async (data) => {
     }
     try {
         const result = await otpService.verifyToken(data.token, user.pinCode)
-        if (result.data.verified === true) {
-            const result = await db.User.update(
-                { isPhoneValid: true },
-                {
-                    where: {
-                        phoneNumber: data.phoneNumber
+        if (data.errorType === 'INVALID_PHONE_NUMBER') {
+            if (result.data.verified === true) {
+                const result = await db.User.update(
+                    { isPhoneValid: true },
+                    {
+                        where: {
+                            phoneNumber: data.phoneNumber
+                        },
                     },
-                },
-            );
-            return {
-                success: true,
-                message: 'user update successful',
-                code: 200,
-                data: result
+                );
+            } else {
+                return {
+                    success: false,
+                    message: 'Token verification failed',
+                    code: 405
+                }
             }
-        } else {
-            return {
-                success: false,
-                message: 'verification failed',
-                code: 401,
+        } else if (data.errorType === 'NEW_DEVICE_DETECTED') {
+            if (result.data.verified === true) {
+                const result = await db.User.update(
+                    { uniqueId: data.uniqueId },
+                    {
+                        where: {
+                            phoneNumber: data.phoneNumber
+                        },
+                    },
+                );
+            } else {
+                return {
+                    success: false,
+                    message: 'Token verification failed',
+                    code: 405
+                }
             }
         }
+        return {
+            success: true,
+            message: 'user update successful',
+            code: 200
+        }
     } catch (error) {
-        console.log(error);
         return {
             success: false,
-            message: error?.response?.data ? error?.response?.data?.message : 'verification failed',
+            message: error?.response?.data?.verified ==='Expired' ? 'Token expired' : 'Token verification failed',
             code: 401,
         }
     }
