@@ -108,6 +108,7 @@ const loginUser = async (data) => {
         };
     }
     //generate token
+    // eslint-disable-next-line no-undef
     const token = jwt.sign({ username: user.id, phoneNumber: user.phoneNumber }, process.env.SECRET_KEY);
     // return response with token
     return {
@@ -234,11 +235,11 @@ const verifyUserToken = async (data) => {
                 }
             }
         }
-        return {
-            success: true,
-            message: 'user update successful',
-            code: 200
-        }
+        // return {
+        //     success: true,
+        //     message: 'user update successful',
+        //     code: 200
+        // }
     } catch (error) {
         return {
             success: false,
@@ -268,6 +269,7 @@ const resendToken = async (data) => {
             code: 200,
         }
     } catch (error) {
+        console.log(error)
         return {
             success: false,
             message: 'Unable to send token at the moment',
