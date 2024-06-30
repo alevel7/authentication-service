@@ -7,6 +7,12 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        
+        permissions:
+            contents: write
+            pull-requests: write
+            repository-projects: write
+
         steps:
             - uses: actions/checkout@v4
 
@@ -36,7 +42,7 @@ jobs:
                   path: dist
 
             - name: add comment to pull request
-              uses: actions/github-script@v6
+              uses: actions/github-script@v7
               with:
                   script: |
                       github.rest.issues.createComment({
