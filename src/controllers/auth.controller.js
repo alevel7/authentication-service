@@ -71,9 +71,6 @@ class AuthController {
         const serviceResponse = await authService.saveUserSecurityAnswer(req.body.data, req.params.userId);
         return res.status(serviceResponse.code).json(serviceResponse);
     }
-    async getUserByBvn(req, res) {
-        
-    }
 
     async verifyToken(req, res) {
         let validation = new Validator(req.body, validators.verifyTokenPayload);

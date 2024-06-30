@@ -1,0 +1,25 @@
+name: Nodejs ci
+
+on:
+    push:
+        branches: [main]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Use Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '14'
+
+            - name: npm install dependencies
+              run: npm install
+
+            - name: run build
+              run: npm run build --if-present
+              
+            - name: lint code
+              run: npm run eslint

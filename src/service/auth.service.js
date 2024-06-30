@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const db = require('../models/index');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -108,7 +109,6 @@ const loginUser = async (data) => {
         };
     }
     //generate token
-    // eslint-disable-next-line no-undef
     const token = jwt.sign({ username: user.id, phoneNumber: user.phoneNumber }, process.env.SECRET_KEY);
     // return response with token
     return {
@@ -202,7 +202,7 @@ const verifyUserToken = async (data) => {
         const result = await otpService.verifyToken(data.token, user.pinCode)
         if (data.errorType === 'INVALID_PHONE_NUMBER') {
             if (result.data.verified === true) {
-                const result = await db.User.update(
+                await db.User.update(
                     { isPhoneValid: true },
                     {
                         where: {
@@ -219,7 +219,7 @@ const verifyUserToken = async (data) => {
             }
         } else if (data.errorType === 'NEW_DEVICE_DETECTED') {
             if (result.data.verified === true) {
-                const result = await db.User.update(
+                await db.User.update(
                     { uniqueId: data.uniqueId },
                     {
                         where: {
@@ -235,11 +235,11 @@ const verifyUserToken = async (data) => {
                 }
             }
         }
-        // return {
-        //     success: true,
-        //     message: 'user update successful',
-        //     code: 200
-        // }
+        return {
+            success: true,
+            message: 'user update successful',
+            code: 200
+        }
     } catch (error) {
         return {
             success: false,
