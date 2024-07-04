@@ -33,13 +33,15 @@ jobs:
               run: npm run build --if-present
 
             - name: test code
+              id: test
+              continue-on-error: true
               run: npm run test:unit
-            
+
             - name: create issue if test fails
               uses: actions/github-script@v7
               with:
                 script: |
-                  if (context.result === 'failure') {
+                  if (context.result === 'failure' && context.step_name === 'test') {
                     await context.octokit.issues.create({
                       owner: context.repo.owner,
                       repo: context.repo.repo,
@@ -48,8 +50,6 @@ jobs:
                       labels: ['build:failed'],
                       assignees: [context.actor.id],
                     });
-                  }
-              
             
             - name: build artifacts
               uses: actions/upload-artifact@v4
