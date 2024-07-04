@@ -32,7 +32,7 @@ describe("AuthService", function () {
             const response = await authService.registerUser(payload);
 
             // perform assertions and expectations
-            expect(response.firstName).to.equal(payload.firstNames);
+            expect(response.firstName).to.equal(payload.firstName);
             // expect(response.success).to.equal(true);
         });
 

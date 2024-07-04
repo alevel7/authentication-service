@@ -67,7 +67,15 @@ jobs:
                       repo: context.repo.repo,
                       labels: ['build:failed'],
                     });
-
-                    console.log(repos)
+                    console.log('steps.test.outcome',steps.test.outcome;
+                    for (const repo of repos.data) {
+                      if (repo.state === 'open' && steps.test.outcome !== 'failure')
+                      await github.rest.issues.update({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: repo.number,
+                        state: 'closed',
+                      });
+                    }
                    
               
