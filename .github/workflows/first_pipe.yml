@@ -51,34 +51,38 @@ jobs:
                       labels: ['build:failed'],
                       assignees: [context.actor],
                     });
-            
+
+            - name: close opened issues
+              if: ${{steps.test.outcome == 'success'}}
+              uses: actions/github-script@v7
+              with:
+                script: |
+                  const repos = await github.rest.issues.listForRepo({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    state: 'open',
+                    labels: 'build:failed',
+                  });
+                  if(repos.data.length > 0) {
+                      for(const repo of repos.data) {
+                          await github.rest.issues.update({
+                              owner: context.repo.owner,
+                              repo: context.repo.repo,
+                              issue_number: repo.number,
+                              state: 'closed',
+                          });
+                      }
+                  }
+
+
+              
+
             - name: build artifacts
               uses: actions/upload-artifact@v4
               with:
                   name: build-artifacts
                   path: dist
             
-            - name: close opened issues
-              uses: actions/github-script@v7
-              with:
-                script: |
-                    const repos = await github.rest.issues.listForRepo({
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      labels: ['build:failed'],
-                    });
-                    if ('${{steps.test.outcome}}' === 'success') {
-                      console.log('Test step passed');
-                    }
-
-                    # for (const repo of repos.data) {
-                    #   if (repo.state === 'open' && steps.test.outcome !== 'failure')
-                    #   await github.rest.issues.update({
-                    #     owner: context.repo.owner,
-                    #     repo: context.repo.repo,
-                    #     issue_number: repo.number,
-                    #     state: 'closed',
-                    #   });
-                    # }
+           
                    
               
