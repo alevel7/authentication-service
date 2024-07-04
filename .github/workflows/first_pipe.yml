@@ -65,16 +65,9 @@ jobs:
                     const repos = await github.rest.issues.listForRepo({
                       owner: context.repo.owner,
                       repo: context.repo.repo,
+                      labels: ['build:failed'],
                     });
+
                     console.log(repos)
-                    # for (const repo of repos.data) {
-                    #   if (repo.state === 'open' && repo.labels.some(label => label.name === 'build:failed')) {
-                    #     await github.rest.issues.update({
-                    #       owner: context.repo.owner,
-                    #       repo: context.repo.repo,
-                    #       issue_number: repo.number,
-                    #       state: 'closed',
-                    #     });
-                    #   }
-                    # }
+                   
               
