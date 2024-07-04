@@ -67,7 +67,7 @@ jobs:
                       repo: context.repo.repo,
                       labels: ['build:failed'],
                     });
-                    if (steps.test.outcome === 'success') {
+                    if ('${{steps.test.outcome}}' === 'success') {
                       console.log('Test step passed');
                     }
 
