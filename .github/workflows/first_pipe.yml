@@ -27,7 +27,7 @@ jobs:
               run: npm install
             
             - name: Report error if install failed
-              uses: alevel7/authentication-service/.github/actions/action@workshop3
+              uses: ../actions/@workshop3
               with:
                 outcome: ${{steps.install-node.outcome}}
                 label: 'install:failed'
