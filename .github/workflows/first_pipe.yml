@@ -15,7 +15,6 @@ jobs:
             issues: write
 
         steps:
-            - uses: actions/checkout@v4
 
             - name: Use Node.js
               uses: actions/setup-node@v4
@@ -23,59 +22,52 @@ jobs:
                   node-version: '14'
 
             - name: npm install dependencies
+              continue-on-error: true
+              id: install-node
               run: npm install
+            
+            - name: Report error if install failed
+              uses: alevel7/authentication-service/.github/actions/action@workshop3
+              with:
+                outcome: ${{steps.install-node.outcome}}
+                label: 'install:failed'
+                title: 'install failed'
+
 
             - name: lint code
               id: lint
               continue-on-error: true
               run: npm run eslint
 
+            - name: Report error if lint failed
+              uses: alevel7/authentication-service/.github/actions/action@workshop3
+              with:
+                outcome: ${{steps.lint.outcome}}
+                label: 'lint:failed'
+                title: 'lint failed'
+
             - name: run build
+              id: build
               run: npm run build --if-present
+
+            - name: Report error if build failed
+              uses: alevel7/authentication-service/.github/actions/actions.yml
+              with:
+                outcome: ${{steps.lint.outcome}}
+                label: 'build:failed'
+                title: 'build failed'
 
             - name: test code
               id: test
               continue-on-error: true
               run: npm run test:unit
 
-            - name: create issue if test fails
-              if: ${{ steps.test.outcome == 'failure' }}
-              uses: actions/github-script@v7
+            - name: Report error if build failed
+              uses: alevel7/authentication-service/.github/actions/actions.yml
               with:
-                script: |
-                    await github.rest.issues.create({
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      title: 'Build failed',
-                      body: 'The build for this PR has failed. Please check the build logs for more details.',
-                      labels: ['build:failed'],
-                      assignees: [context.actor],
-                    });
-
-            - name: close opened issues
-              if: ${{steps.test.outcome == 'success'}}
-              uses: actions/github-script@v7
-              with:
-                script: |
-                  const repos = await github.rest.issues.listForRepo({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    state: 'open',
-                    labels: 'build:failed',
-                  });
-                  if(repos.data.length > 0) {
-                      for(const repo of repos.data) {
-                          await github.rest.issues.update({
-                              owner: context.repo.owner,
-                              repo: context.repo.repo,
-                              issue_number: repo.number,
-                              state: 'closed',
-                          });
-                      }
-                  }
-
-
-              
+                outcome: ${{steps.lint.outcome}}
+                label: 'build:failed'
+                title: 'build failed'
 
             - name: build artifacts
               uses: actions/upload-artifact@v4
