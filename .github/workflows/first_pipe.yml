@@ -34,7 +34,7 @@ jobs:
               uses: ./.github/actions/report
               with:
                 outcome: ${{steps.install-node.outcome}}
-                label: 'failed'
+                label: 'install-failed'
                 title: 'install failed'
 
 
