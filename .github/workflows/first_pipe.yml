@@ -31,7 +31,7 @@ jobs:
             - run: ls
             
             - name: Report error if install failed
-              uses: ./../.github/actions/report@workshop3
+              uses: ./.github/actions/report@workshop3
               with:
                 outcome: ${{steps.install-node.outcome}}
                 label: 'install:failed'
