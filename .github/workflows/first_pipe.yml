@@ -28,7 +28,7 @@ jobs:
               id: install-node
               run: npm install
 
-            - run: pwd && ls ./
+            - run: pwd && ls ./ -a
             
             - name: Report error if install failed
               uses: ./.github/actions/report
