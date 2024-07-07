@@ -22,13 +22,13 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: '20'
-            
-            - run: ls
 
             - name: npm install dependencies
               continue-on-error: true
               id: install-node
               run: npm install
+
+            - run: ls
             
             - name: Report error if install failed
               uses: ./../.github/actions/report@workshop3
