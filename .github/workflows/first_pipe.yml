@@ -27,7 +27,7 @@ jobs:
               run: npm install
             
             - name: Report error if install failed
-              uses: ../actions/@workshop3
+              uses: ./.github/actions/report@workshop3
               with:
                 outcome: ${{steps.install-node.outcome}}
                 label: 'install:failed'
@@ -40,7 +40,7 @@ jobs:
               run: npm run eslint
 
             - name: Report error if lint failed
-              uses: alevel7/authentication-service/.github/actions/action@workshop3
+              uses: ./.github/actions/report@workshop3
               with:
                 outcome: ${{steps.lint.outcome}}
                 label: 'lint:failed'
@@ -51,7 +51,7 @@ jobs:
               run: npm run build --if-present
 
             - name: Report error if build failed
-              uses: alevel7/authentication-service/.github/actions/actions.yml
+              uses: ./.github/actions/report@workshop3
               with:
                 outcome: ${{steps.lint.outcome}}
                 label: 'build:failed'
@@ -63,7 +63,7 @@ jobs:
               run: npm run test:unit
 
             - name: Report error if build failed
-              uses: alevel7/authentication-service/.github/actions/actions.yml
+              uses:  ./.github/actions/report@workshop3
               with:
                 outcome: ${{steps.lint.outcome}}
                 label: 'build:failed'
