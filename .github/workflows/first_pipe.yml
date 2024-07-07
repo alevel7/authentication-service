@@ -34,7 +34,7 @@ jobs:
               uses: ./.github/actions/report
               with:
                 outcome: ${{steps.install-node.outcome}}
-                label: 'install:failed'
+                label: 'install-failed'
                 title: 'install failed'
 
 
@@ -44,7 +44,7 @@ jobs:
               run: npm run eslint
 
             - name: Report error if lint failed
-              uses: ./.github/actions/report@workshop3
+              uses: ./.github/actions/report
               with:
                 outcome: ${{steps.lint.outcome}}
                 label: 'lint:failed'
@@ -55,7 +55,7 @@ jobs:
               run: npm run build --if-present
 
             - name: Report error if build failed
-              uses: ./.github/actions/report@workshop3
+              uses: ./.github/actions/report
               with:
                 outcome: ${{steps.lint.outcome}}
                 label: 'build:failed'
@@ -67,7 +67,7 @@ jobs:
               run: npm run test:unit
 
             - name: Report error if build failed
-              uses:  ./.github/actions/report@workshop3
+              uses:  ./.github/actions/report
               with:
                 outcome: ${{steps.lint.outcome}}
                 label: 'build:failed'
