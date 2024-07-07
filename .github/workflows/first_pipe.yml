@@ -28,10 +28,10 @@ jobs:
               id: install-node
               run: npm install
 
-            - run: ls
+            - run: pwd
             
             - name: Report error if install failed
-              uses: alevel7/authentication-service/.github/actions/report@workshop3
+              uses: alevel7/authentication-service/.github/actions/report
               with:
                 outcome: ${{steps.install-node.outcome}}
                 label: 'install:failed'
