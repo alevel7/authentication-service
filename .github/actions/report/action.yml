@@ -26,15 +26,15 @@ runs:
                         owner: context.repo.owner,
                         repo: context.repo.repo,
                         state: 'open',
-                        labels: [${{inputs.label}}],
+                        labels: "${{inputs.label}}",
                     })
                     const existingIssues = issues.find((issue) => issue.title === ${{inputs.title}})
                     if (!existingIssues) {
                         await github.rest.issues.create({
                             owner: context.repo.owner,
                             repo: context.repo.repo,
-                            title: ${{inputs.title}},
-                            labels: [${{inputs.label}}],
+                            title: "${{inputs.title}}",
+                            labels: ["${{inputs.label}}""],
                             body: body,
                             assignees:assignees
                         })
@@ -57,7 +57,7 @@ runs:
                         owner: context.repo.owner,
                         repo: context.repo.repo,
                         state: 'open',
-                        labels: ${{inputs.label}},
+                        labels: "${{inputs.label}}"",
                     })
 
                     for(const issue of issues) {
