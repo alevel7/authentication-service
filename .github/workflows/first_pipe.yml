@@ -31,7 +31,7 @@ jobs:
             - run: pwd
             
             - name: Report error if install failed
-              uses: alevel7/authentication-service/.github/actions/report
+              uses: ./.github/actions/report
               with:
                 outcome: ${{steps.install-node.outcome}}
                 label: 'install:failed'
