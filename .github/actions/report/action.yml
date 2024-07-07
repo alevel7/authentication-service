@@ -28,7 +28,7 @@ runs:
                         state: 'open',
                         labels: "${{inputs.label}}",
                     })
-                    const existingIssues = issues.find((issue) => issue.title === ${{inputs.title}})
+                    const existingIssues = issues.find((issue) => issue.title === "${{inputs.title}}")
                     if (!existingIssues) {
                         await github.rest.issues.create({
                             owner: context.repo.owner,
